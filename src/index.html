@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Markdown to HTML Preview</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="functions.js"></script>
+    </head>
+    <body>
+        <h1>Markdown to HTML Preview</h1>
+        <button onclick="preview()">Execute</button>
+        <div class="container">
+        <div>
+            <h2>Markdown Input</h2>
+            <textarea id="markdown-input" placeholder="Enter Markdown text..."></textarea>
+            <h2>Markdown preview</h2>
+            <div class="preview" id="markdown-preview"></div>
+        </div>
+        <div>
+            <h2>HTML Output</h2>
+            <div>
+                <pre class="preview" id="html-output"></pre>
+            </div>
+            <h2>HTML preview</h2>
+            <div class="preview" id="html-preview"></div>
+        </div>
+        </div>
+
+        <script>
+        function preview() {
+            let markdownInput = document.getElementById('markdown-input').value;
+            let markdownPreview = document.getElementById('markdown-preview');
+            let htmlOutput = document.getElementById('html-output');
+            let htmlPreview = document.getElementById('html-preview');
+
+            // Convert Markdown to HTML
+            let htmlContent = marked.parse(markdownInput);
+
+            // Update Markdown preview
+            markdownPreview.innerHTML = htmlContent;
+
+            htmlOutput.textContent = composedTransformations(markdownInput);
+            htmlPreview.innerHTML = composedTransformations(markdownInput);
+        }
+        </script>
+    </body>
+</html>
