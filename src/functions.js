@@ -115,7 +115,12 @@ function convertListHTML(text) {
         const content = line.trim(); // Eliminar la sangría de la línea
         if (content !== '' && ['* ', '+ ', '- ', '1. '].some(prefix => content.startsWith(prefix))) {
             const level = (line.match(/^\s*/) || [''])[0].length;
-            if (openTypeList.length === 0 || level > levelList) { // Abrir una nueva lista si no está abierta o si el nivel de sangría es mayor que el nivel actual
+            const minLevel = /^\s*\d+\./.test(line) ? 3 : 2;
+            const maxLevel = /^\s*\d+\./.test(line) ? 7 : 6;
+            if (level >= maxLevel) {
+                result = result.slice(0, result.lastIndexOf('</li>')) + ' ' + content + result.slice(result.lastIndexOf('</li>'));;
+            } else {
+            if (openTypeList.length === 0 || (level > levelList && level >= minLevel)) { // Abrir una nueva lista si no está abierta o si el nivel de sangría es mayor que el nivel actual
                 result += content.match(/[*+\-]|1\./g)[0] === '1.' ? '<ol>' : '<ul>';
                 openTypeList.push(content.match(/[*+\-]|1\./g)[0] === '1.' ? '<ol>' : '<ul>');
             } else if (level < levelList) {
@@ -135,9 +140,16 @@ function convertListHTML(text) {
                 result += (cutList && openTypeList[openTypeList.length - 1] === '<ul>') ? `<ul>` : ``;
                 result += `<li>${content.replace(/^[*+-]|\d+\. /, '')}</li>`;
                 cutList = (cutList && openTypeList[openTypeList.length - 1] === '<ul>') ? false : cutList;
-            }
+            }}
       
             levelList = level;
+        } else if (content !== '' && /^\d+\./.test(content) && openTypeList[openTypeList.length - 1] === '<ol>') {
+            const level = (line.match(/^\s*/) || [''])[0].length;
+            if (level >= 7) {
+                result = result.slice(0, result.lastIndexOf('</li>')) + ' ' + content + result.slice(result.lastIndexOf('</li>'));;
+            } else {
+                result += `<li>${content.replace(/^[*+-]|\d+\. /, '')}</li>`;
+            }
         } else if (content !== '') {
             if (openTypeList.length !== 0) { // Si viene texto y tenemos lista abierta
                 result = result.slice(0, result.lastIndexOf('</li>')) + ' ' + content + result.slice(result.lastIndexOf('</li>'));;
