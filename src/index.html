@@ -41,6 +41,12 @@
             // Update Markdown preview
             markdownPreview.innerHTML = htmlContent;
 
+            // Review list
+            // markdownInput = checkListFunction(markdownInput);
+            // htmlOutput.textContent = checkListFunction(markdownInput);
+            // htmlPreview.innerHTML = checkListFunction(markdownInput);
+            // htmlOutput.textContent = convertBlockquotes2(markdownInput);
+            // htmlPreview.innerHTML = convertBlockquotes2(markdownInput);
             htmlOutput.textContent = composedTransformations(markdownInput);
             htmlPreview.innerHTML = composedTransformations(markdownInput);
         }
