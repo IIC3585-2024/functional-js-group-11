@@ -27,7 +27,11 @@ Duis vel dolor et lacus sodales ultricies vel vitae risus. Vivamus varius, lorem
 
 ---
 
-[Enlace a Google](https://www.google.com)
+[Enlace a Google](https://www.google.com)  
+
+<https://www.markdownguide.org>  
+
+<fake@example.com>  
 
 ![Imagen de ejemplo](https://via.placeholder.com/150)
 

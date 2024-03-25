@@ -35,19 +35,15 @@
             let htmlOutput = document.getElementById('html-output');
             let htmlPreview = document.getElementById('html-preview');
 
-            // Convert Markdown to HTML
+            // Conversión de markdown a HTML con la librería marked
             let htmlContent = marked.parse(markdownInput);
 
-            // Update Markdown preview
+            // Resultado esperado de la transformación de Markdown a HTML
             markdownPreview.innerHTML = htmlContent;
 
-            // Review list
-            // markdownInput = checkListFunction(markdownInput);
-            // htmlOutput.textContent = checkListFunction(markdownInput);
-            // htmlPreview.innerHTML = checkListFunction(markdownInput);
-            // htmlOutput.textContent = convertBlockquotes2(markdownInput);
-            // htmlPreview.innerHTML = convertBlockquotes2(markdownInput);
+            // Nuestra transformación de md a HTML
             htmlOutput.textContent = composedTransformations(markdownInput);
+            // Vista previa de nuestra transformación
             htmlPreview.innerHTML = composedTransformations(markdownInput);
         }
         </script>
