@@ -31,7 +31,7 @@ Duis vel dolor et lacus sodales ultricies vel vitae risus. Vivamus varius, lorem
 
 <https://www.markdownguide.org>  
 
-<fake@example.com>  
+<fake@example.com>
 
 ![Imagen de ejemplo](https://via.placeholder.com/150)
 

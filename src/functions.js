@@ -70,7 +70,7 @@ const convertLinksAbsolute = (markdown) => {
 }
 
 const convertLinksMail = (markdown) => { 
-    file = markdown.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, (match, mail) => { 
+    file = markdown.replace(/<([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})>/g, (match, mail) => { 
         return `<a href="${mail}">${mail}</a>`; 
     }); 
     return file 
