@@ -76,7 +76,7 @@ const convertImage = (markdown) => {
     return file
 }
 
-const composedLinks = compose(
+const convertLinks = compose(
     convertLinksBasic,
     convertLinksWithTitle,
     convertLinksAbsolute,
@@ -154,5 +154,5 @@ const composedTransformations = compose(
     convertBlockquotes,
     checkListFunction,
     convertImage,
-    composedLinks,
+    convertLinks,
 );
