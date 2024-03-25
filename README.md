@@ -16,6 +16,7 @@
 - Links:
     - With titles
     - Urls
+    - Mails
 - Images
 
 # Ejecución

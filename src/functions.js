@@ -69,6 +69,13 @@ const convertLinksAbsolute = (markdown) => {
     return file 
 }
 
+const convertLinksMail = (markdown) => { 
+    file = markdown.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, (match, mail) => { 
+        return `<a href="${mail}">${mail}</a>`; 
+    }); 
+    return file 
+}
+
 const convertImage = (markdown) => {
     file = markdown.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, (match, alt, src) => {
         return `<img src="${src}" alt="${alt}">`;
@@ -77,6 +84,7 @@ const convertImage = (markdown) => {
 }
 
 const convertLinks = compose(
+    convertLinksMail,
     convertLinksBasic,
     convertLinksWithTitle,
     convertLinksAbsolute,
