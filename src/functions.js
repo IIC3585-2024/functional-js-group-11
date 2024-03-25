@@ -59,14 +59,14 @@ const convertParagraphs = (data) => {
 }
 
 const convertLinksBasic = (data) => { 
-    file = data.replace(/\[([^\]]+)\]\(([^"]+)\)/g, (match, texto, url) => { 
+    file = data.replace(/(?<!!)\[([^\]]+)\]\(([^)]+)\)/g, (match, texto, url) => { 
         return `<a href="${url}">${texto}</a>`; 
     }); 
     return file 
 }
 
-const convertLinksWithTitle = (data) => { 
-    file = data.replace(/\[([^\]]+)\]\(([^)]+)\s\"([^"]+)\"\)/g, (match, texto, url, title) => { 
+const convertLinksWithTitle = (data) => {
+    file = data.replace(/(?<!!)\[([^\]]+)\]\(([^)]+)\s"([^"]+)"\)/g, (match, texto, url, title) => { 
         return `<a href="${url}" title="${title}">${texto}</a>`; 
     }); 
     return file 
@@ -79,10 +79,17 @@ const convertLinksAbsolute = (data) => {
     return file 
 }
 
+const convertImage = (data) => {
+    file = data.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, (match, alt, src) => {
+        return `<img src="${src}" alt="${alt}">`;
+    });
+    return file
+}
+
 const composedLinks = compose(
     convertLinksBasic,
     convertLinksWithTitle,
-    convertLinksAbsolute
+    convertLinksAbsolute,
 )
 
 const convertHorizontalRules = (data) => { 
@@ -96,7 +103,6 @@ const convertBlockquotes = (markdown) => {
     });
 }
 
-
 const composedTransformations = compose(
     convertParagraphs,
     composedEmphasis,    
@@ -104,6 +110,7 @@ const composedTransformations = compose(
     convertCode,
     convertHorizontalRules,
     convertBlockquotes,
-    composedLinks
+    convertImage,
+    composedLinks,
 );
 
