@@ -1,3 +1,4 @@
+// Función compose para ejecutar varias funciones en orden de derecha a izquierda
 const compose = (...functions) => {
     return (input) => {
       return functions.reduceRight((acc, fn) => {
@@ -8,36 +9,26 @@ const compose = (...functions) => {
 
 // Función para convertir encabezados Markdown a HTML
 const convertHeaders = (markdown) => {
-    return markdown.replace(/^(#+)\s+(.*)$/gm, (match, hashes, text) => {
-        const level = (hashes) => hashes.length; // Llama a una función para contar los símbolos '#'
-        const headerTag = `h${level(hashes)}`; // Genera el tag HTML correspondiente
-        return level(hashes) <= 6 ? `<${headerTag}>${text}</${headerTag}>` : `${match}`; // Retorna el texto con el tag HTML adecuado
+    return markdown.replace(/(#+)\s+(.*)$/gm, (match, hashes, text) => {
+        const level = (hashes) => hashes.length;
+        const headerTag = `h${level(hashes)}`;
+        return level(hashes) <= 6 ? `<${headerTag}>${text}</${headerTag}>` : `${match}`; 
     });
 };
 
-const handleEmphasis = (match, text, headerTag, endTag) => {
-    return `${headerTag}${text}${endTag}`;
-}
-
 const convertItalics = (markdown) => {
-    const headerTag = '<em>';
-    const endTag = '</em>';
-    return markdown.replace(
-        /(?<!\*)\*(?!\s)([^*]+?)(?<!\s)\*/g, 
-        (match, text) => handleEmphasis(match, text, headerTag, endTag));
+    return markdown.replace(/(?<!\*)\*(?!\s)([^*]+?)(?<!\s)\*/g, (match, text) => `<em>${text}</em>`);
 }
 
 const convertBolds = (markdown) => {
-    const handleEmphasis = (match, text) => `<strong>${text}</strong>`;
-    return markdown.replace(/\*\*(?!\s)([^*]+?)(?<!\s)\*\*(?!\*)/g, handleEmphasis);
+    return markdown.replace(/\*\*(?!\s)([^*]+?)(?<!\s)\*\*(?!\*)/g, (match, text) => `<strong>${text}</strong>`);
 }
 
 const convertBoldsAndItalics = (markdown) => {
-    const handleEmphasis = (match, text) => `<em><strong>${text}</strong></em>`;
-    return markdown.replace(/\*\*\*(?!\s)([^*]+?)(?<!\s)\*\*\*/g, handleEmphasis);
+    return markdown.replace(/\*\*\*(?!\s)([^*]+?)(?<!\s)\*\*\*/g, (match, text) => `<em><strong>${text}</strong></em>`);
 }
 
-const composedEmphasis = compose(
+const convertEmphasis = compose(
     convertItalics, convertBolds, convertBoldsAndItalics
 );
 
@@ -47,9 +38,8 @@ const convertCode = (markdown) => {
     });
 }
 
-
-const convertParagraphs = (data) => { 
-    file = data.replace(/^(?!#|>)(.+) {2,}\n/gm, (match, texto) => { 
+const convertParagraphs = (markdown) => { 
+    file = markdown.replace(/^(?!#>)(.+) {2,}\n/gm, (match, texto) => { 
         return `${texto}<br>`; 
     }); 
     file = file.replace(/^(?!<)(.+)$/gm, (match, parrafo) => { 
@@ -58,29 +48,29 @@ const convertParagraphs = (data) => {
     return file; 
 }
 
-const convertLinksBasic = (data) => { 
-    file = data.replace(/(?<!!)\[([^\]]+)\]\(([^)]+)\)/g, (match, texto, url) => { 
+const convertLinksBasic = (markdown) => { 
+    file = markdown.replace(/(?<!!)\[([^\]]+)\]\(([^)]+)\)/g, (match, texto, url) => { 
         return `<a href="${url}">${texto}</a>`; 
     }); 
     return file 
 }
 
-const convertLinksWithTitle = (data) => {
-    file = data.replace(/(?<!!)\[([^\]]+)\]\(([^)]+)\s"([^"]+)"\)/g, (match, texto, url, title) => { 
+const convertLinksWithTitle = (markdown) => {
+    file = markdown.replace(/(?<!!)\[([^\]]+)\]\(([^)]+)\s"([^"]+)"\)/g, (match, texto, url, title) => { 
         return `<a href="${url}" title="${title}">${texto}</a>`; 
     }); 
     return file 
 }
 
-const convertLinksAbsolute = (data) => { 
-    file = data.replace(/<([^>]+)>/g, (match, url) => { 
+const convertLinksAbsolute = (markdown) => { 
+    file = markdown.replace(/<([^>]+)>/g, (match, url) => { 
         return `<a href="${url}">${url}</a>`; 
     }); 
     return file 
 }
 
-const convertImage = (data) => {
-    file = data.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, (match, alt, src) => {
+const convertImage = (markdown) => {
+    file = markdown.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, (match, alt, src) => {
         return `<img src="${src}" alt="${alt}">`;
     });
     return file
@@ -105,7 +95,7 @@ const convertBlockquotes = (markdown) => {
 
 const composedTransformations = compose(
     convertParagraphs,
-    composedEmphasis,    
+    convertEmphasis,    
     convertHeaders, 
     convertCode,
     convertHorizontalRules,
